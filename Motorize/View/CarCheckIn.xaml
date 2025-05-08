@@ -1,0 +1,56 @@
+﻿<Window x:Class="Motorize.View.CarCheckIn"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Check-In do Carro" Height="600" Width="700" Background="#F5F5F5">
+    <Grid Margin="20">
+        <StackPanel>
+
+            <!-- Cadastro do Veículo -->
+            <GroupBox Header="Cadastro do Veículo" Margin="0,10,0,10">
+                <StackPanel>
+                    <TextBox Name="PlacaTextBox" Text="Placa do carro" Foreground="Gray" 
+                             GotFocus="TextBox_GotFocus" LostFocus="PlacaTextBox_LostFocus" Margin="0,5,0,5"/>
+                    <TextBox Name="MarcaTextBox" Text="Marca do carro" Foreground="Gray" 
+                             GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" Margin="0,5,0,5"/>
+                    <TextBox Name="ModeloTextBox" Text="Modelo do carro" Foreground="Gray" 
+                             GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" Margin="0,5,0,5"/>
+                    <TextBox Name="AnoTextBox" Text="Ano de fabricação" Foreground="Gray" 
+                             GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" Margin="0,5,0,5"/>
+                    <TextBox Name="CorTextBox" Text="Cor do carro" Foreground="Gray" 
+                             GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" Margin="0,5,0,5"/>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Informações do Proprietário -->
+            <GroupBox Header="Informações do Proprietário" Margin="0,10,0,10">
+                <StackPanel>
+                    <TextBox Name="CPFTextBox" Text="CPF" Foreground="Gray" 
+                             GotFocus="TextBox_GotFocus" LostFocus="CPFTextBox_LostFocus" Margin="0,5,0,5"/>
+                    <TextBox Name="NomeProprietarioTextBox" Text="Nome do proprietário" Foreground="Gray" 
+                             GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" Margin="0,5,0,5"/>
+                    <TextBox Name="ContatoTextBox" Text="Contato" Foreground="Gray" 
+                             GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" Margin="0,5,0,5"/>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Fase Inicial da Manutenção -->
+            <GroupBox Header="Fase 1 - Manutenção" Margin="0,10,0,10">
+                <StackPanel>
+                    <TextBox Name="ObservacoesTextBox" Text="Observações" Foreground="Gray" 
+                             GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" Margin="0,5,0,5"/>
+                    <TextBox Name="MotivoPrincipalTextBox" Text="Motivo principal" Foreground="Gray" 
+                             GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" Margin="0,5,0,5"/>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Botões -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Button Content="Salvar e Continuar" Background="#4CAF50" Foreground="White" 
+                        FontWeight="Bold" Margin="5" Width="150" Click="SaveButton_Click"/>
+                <Button Content="Cancelar" Background="#F44336" Foreground="White"
+                        FontWeight="Bold" Margin="5" Width="150" Click="CancelButton_Click"/>
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</Window>
