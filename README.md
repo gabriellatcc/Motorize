@@ -12,6 +12,7 @@ Com foco na organização, a solução oferece uma visão clara das tarefas em a
 - **WPF (Windows Presentation Foundation)** (framework para interface gráfica)
 - **XAML** (markup para a construção da interface)
 - **MySQL** (banco de dados relacional)
+- **MySQL Workbench** (ferramenta para modelagem e administração do banco)  
 - **MySQL Connector/NET** (para comunicação entre a aplicação e o banco)
 
 ## 📌 Funcionalidades
