@@ -25,6 +25,6 @@ Com foco na organização, a solução oferece uma visão clara das tarefas em a
 
 ## 👥 Equipe
 
-- **Lívia Elisei Neves Machado** - [@liviaelisei](https://github.com/liviaelisei) (Desenvolvimento backend, integração com frontend e banco de dados relacional)
-- **Gabriella Tavares Costa Corrêa** - [@gabriellatcc](https://github.com/gabriellatcc) (Estruturação inicial, documentação e revisão)
-- **Yuri Garcia Mai** - [@yurigmaia](https://github.com/yurigmaia) (Desenvolvimento frontend)
+- **Lívia Elisei Neves Machado** - [@liviaelisei](https://github.com/liviaelisei) (Consolidação de ideias, desenvolvimento backend, integração com frontend e implementação do banco de dados relacional)
+- **Gabriella Tavares Costa Corrêa** - [@gabriellatcc](https://github.com/gabriellatcc) (Consolidação de ideias, estruturação inicial, documentação e revisão)
+- **Yuri Garcia Mai** - [@yurigmaia](https://github.com/yurigmaia) (Consolidação de ideias, desenvolvimento design frontend)
