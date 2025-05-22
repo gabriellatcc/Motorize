@@ -1,0 +1,151 @@
+﻿<Window x:Class="Motorize.View.EditarCarroWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Editar Carro"
+        Width="500"
+        Height="500"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#F5F5F5">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <!-- Cabeçalho -->
+            <RowDefinition Height="*"/>
+            <!-- Conteúdo -->
+        </Grid.RowDefinitions>
+
+        <!-- 🔹 Cabeçalho -->
+        <Border Background="#FF011323" Grid.Row="0" MouseLeftButtonDown="Header_MouseLeftButtonDown">
+            <Grid>
+                <TextBlock Text="Editar Carro"
+                           Foreground="White"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="10,0,0,0"/>
+
+                <Image Source="C:\Users\livia\OneDrive\Documentos\Faculdade\Terceiro Semestre\POO-Carol\LogoMotorize-removebg-preview.png"
+                       Height="40"
+                       Margin="0,0,100,0"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"/>
+
+                <!-- 🔹 Botão Minimizar -->
+                <Button Content="➖"
+                        Width="40"
+                        Height="40"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,60,0"
+                        Background="#555"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Click="MinimizeButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border CornerRadius="15"
+                                    Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <!-- 🔹 Botão Fechar -->
+                <Button Content="X"
+                        Width="30"
+                        Height="30"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,10,0"
+                        Background="Red"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Click="CloseButton_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border CornerRadius="15"
+                                    Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- 🔹 Conteúdo -->
+        <Grid Grid.Row="1" Margin="20,10,20,10">
+            <Grid Margin="0,0,0,85">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Marca:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="MarcaTextBox" Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+                <TextBlock Text="Modelo:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="ModeloTextBox" Grid.Row="1" Grid.Column="1" Margin="5"/>
+
+                <TextBlock Text="Placa:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="PlacaTextBox" Grid.Row="2" Grid.Column="1" Margin="5"/>
+
+                <TextBlock Text="Nome Proprietário:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="NomeProprietarioTextBox" Grid.Row="3" Grid.Column="1" Margin="5"/>
+
+                <TextBlock Text="Prioridade:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="PrioridadeTextBox" Grid.Row="4" Grid.Column="1" Margin="5"/>
+
+                <TextBlock Text="Observações:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="ObservacoesTextBox" Grid.Row="5" Grid.Column="1" Margin="5"/>
+
+                <TextBlock Text="Motivo Principal:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="MotivoPrincipalTextBox" Grid.Row="6" Grid.Column="1" Margin="5"/>
+
+                <TextBlock Text="Problema Real:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="ProblemaRealTextBox" Grid.Row="7" Grid.Column="1" Margin="5"/>
+
+                <TextBlock Text="Tempo Planejado:" Grid.Row="8" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="TempoPlanejadoTextBox" Grid.Row="8" Grid.Column="1" Margin="5"/>
+
+                <TextBlock Text="Recursos Utilizados:" Grid.Row="9" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="RecursosUtilizadosTextBox" Grid.Row="9" Grid.Column="1" Margin="5"/>
+
+                <TextBlock Text="Valor do Serviço:" Grid.Row="10" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="ValorServicoTextBox" Grid.Row="10" Grid.Column="1" Margin="5"/>
+            </Grid>
+
+            <Button Content="Atualizar Dados"
+                    Click="SalvarAlteracoes_Click"
+                    Width="120"
+                    Height="40"
+                    Background="Green"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Margin="10"/>
+        </Grid>
+    </Grid>
+</Window>

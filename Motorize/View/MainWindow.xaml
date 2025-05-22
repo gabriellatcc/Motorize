@@ -33,6 +33,35 @@
                        Margin="0,0,60,0"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"/>
+                <!-- Botão Minimizar Estilizado -->
+                <Button Content="–"
+        Width="40"
+        Height="40"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Center"
+        Margin="0,0,60,0"
+        Background="#FF002952"
+        Foreground="White"
+        FontWeight="Bold"
+        Click="MinimizeButton_Click"
+        Panel.ZIndex="1">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border CornerRadius="20"
+                    Background="{TemplateBinding Background}">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="Black"
+                                      ShadowDepth="5"
+                                      BlurRadius="10"
+                                      Opacity="0.6"/>
+                                </Border.Effect>
+                                <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
 
                 <!-- Botão Fechar Estilizado -->
                 <Button Content="X"
@@ -69,25 +98,33 @@
         <Border Background="#FF002952" Grid.Row="1" Grid.Column="0">
             <StackPanel>
                 <Button Content="Home"
-                        Background="Transparent"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        FontSize="16"
-                        Margin="10"
-                        Padding="5"/>
+                Background="Transparent"
+                Foreground="White"
+                FontWeight="Bold"
+                FontSize="16"
+                Margin="10"
+                Padding="5"
+                Width="150"
+                Click="AbrirHome"/>
                 <Button Content="Carros"
-                        Background="Transparent"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        FontSize="16"
-                        Margin="10"
-                        Padding="5"/>
+                Background="Transparent"
+                Foreground="White"
+                FontWeight="Bold"
+                FontSize="16"
+                Margin="10"
+                Padding="5"
+                Width="150"
+                Click="AbrirTelaCarro"/>
                 <StackPanel VerticalAlignment="Bottom" Margin="10">
-                    <Button Content="Configurações"
-                            Background="Transparent"
-                            Foreground="White"
-                            FontSize="14"
-                            Padding="5"/>
+                    <Button Content="Relatório"
+                    Background="Transparent"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    FontSize="16"
+                    Margin="10"
+                    Padding="5"
+                    Width="150"
+                    Click="TelaRelatorio"/>
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -130,7 +167,7 @@
         FontWeight="Bold"
         FontSize="16"
         BorderBrush="#388E3C"
-        BorderThickness="2"
+        BorderThickness="0"
         Click="AddCarButton_Click"
         Panel.ZIndex="1">
                 <Button.Template>

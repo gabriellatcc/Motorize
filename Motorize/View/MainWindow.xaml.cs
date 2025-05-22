@@ -6,6 +6,13 @@ using Motorize.Services;
 using Motorize.Models;
 using System.Linq;
 using MySql.Data.MySqlClient;
+using System.Windows.Media.Effects;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using K4os.Compression.LZ4.Internal;
+using Mysqlx.Crud;
+using System.Reflection.Metadata;
+using System.Windows.Documents;
 
 namespace Motorize.View
 {
@@ -61,74 +68,276 @@ namespace Motorize.View
             var novaJanela = new CarCheckIn(this);
             novaJanela.ShowDialog(); // Isso garante que a tela seja exibida
 
-            if (novaJanela.NovoCarro != null) // Se um carro foi adicionado
+            if (novaJanela.NovoCarro != null)
             {
-                CarrosNaOficina.Add(novaJanela.NovoCarro);
-                AtualizarListaDeCarros();
+                AtualizarListaDeCarros(); // Apenas atualiza a interface
             }
+
         }
         private Border CriarBlocoCarro(Carro carro)
         {
+            // 🔹 Texto e cor da prioridade
+            string prioridadeDescricao = carro.Prioridades switch
+            {
+                1 => "1 - Simples e rápido",
+                2 => "2 - Simples, sem urgência",
+                3 => "3 - Moderado e rápido",
+                4 => "4 - Moderado, sem urgência",
+                5 => "5 - Crítico e demorado",
+                _ => "Não definida"
+            };
+
+            SolidColorBrush prioridadeCor = carro.Prioridades switch
+            {
+                1 or 2 => new SolidColorBrush(Color.FromRgb(76, 175, 80)),  // Verde
+                3 or 4 => new SolidColorBrush(Color.FromRgb(255, 152, 0)),  // Laranja
+                5 => new SolidColorBrush(Color.FromRgb(244, 67, 54)),       // Vermelho
+                _ => new SolidColorBrush(Color.FromRgb(150, 150, 150))      // Cinza
+            };
+
             var carContainer = new Border
             {
                 BorderThickness = new Thickness(2),
-                Width = 250,
-                Height = 300,
-                Margin = new Thickness(15),
+                Width = 220,
+                Height = 250,
+                Margin = new Thickness(10),
                 CornerRadius = new CornerRadius(12),
-                Background = System.Windows.Media.Brushes.White
+                Background = Brushes.White,
+                Effect = new DropShadowEffect
+                {
+                    Color = Colors.Gray,
+                    ShadowDepth = 5,
+                    BlurRadius = 8,
+                    Opacity = 0.4
+                }
             };
 
-            var panel = new StackPanel { Margin = new Thickness(10) };
-
-            //panel.Children.Add(new TextBlock { Text = $"Fase: {carro.Fase}", FontWeight = FontWeights.Bold });
-            panel.Children.Add(new TextBlock { Text = $"Marca: {carro.Marca}" });
-            panel.Children.Add(new TextBlock { Text = $"Modelo: {carro.Modelo}" });
-            panel.Children.Add(new TextBlock { Text = $"Placa: {carro.Placa}" });
-            panel.Children.Add(new TextBlock { Text = $"Dono: {carro.NomeProprietario}" });
-
-            var openButton = new Button
+            var panel = new StackPanel
             {
-                Content = "Ver Detalhes",
-                Margin = new Thickness(0, 10, 0, 0),
-                FontWeight = FontWeights.Bold
+                Margin = new Thickness(8),
+                VerticalAlignment = VerticalAlignment.Center
             };
 
-            panel.Children.Add(openButton);
+            // 🔹 Prioridade fixa + descrição colorida
+            panel.Children.Add(new TextBlock
+            {
+                Text = "Prioridade:",
+                FontSize = 11,
+                FontWeight = FontWeights.Bold,
+                HorizontalAlignment = HorizontalAlignment.Center
+            });
+
+            panel.Children.Add(new TextBlock
+            {
+                Text = prioridadeDescricao,
+                FontSize = 13,
+                FontWeight = FontWeights.Bold,
+                Foreground = prioridadeCor,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, 0, 0, 5)
+            });
+
+            // 🔹 Imagem do carro
+            panel.Children.Add(new Image
+            {
+                Source = new BitmapImage(new Uri("C:/Users/livia/OneDrive/Documentos/B - Faculdade/Terceiro Semestre/POO-Carol/Carrinho.png")),
+                Width = 120,
+                Height = 100,
+                Stretch = Stretch.UniformToFill,
+                HorizontalAlignment = HorizontalAlignment.Center
+            });
+
+            // 🔹 Informações com prefixo em negrito
+            panel.Children.Add(new TextBlock
+            {
+                Inlines = {
+            new Run("Marca: ") { FontWeight = FontWeights.Bold },
+            new Run(carro.Marca)
+        },
+                FontSize = 12
+            });
+
+            panel.Children.Add(new TextBlock
+            {
+                Inlines = {
+            new Run("Modelo: ") { FontWeight = FontWeights.Bold },
+            new Run(carro.Modelo)
+        },
+                FontSize = 12
+            });
+
+            panel.Children.Add(new TextBlock
+            {
+                Inlines = {
+            new Run("Placa: ") { FontWeight = FontWeights.Bold },
+            new Run(carro.Placa)
+        },
+                FontSize = 12
+            });
+
+            panel.Children.Add(new TextBlock
+            {
+                Inlines = {
+            new Run("Dono: ") { FontWeight = FontWeights.Bold },
+            new Run(carro.NomeProprietario)
+        },
+                FontSize = 12
+            });
+
+            // 🔹 Botões
+            StackPanel botoesAcoes = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+
+            Button detalhesButton = new Button
+            {
+                Content = "Detalhes",
+                Background = new SolidColorBrush(Color.FromRgb(76, 175, 80)), // Verde
+                Foreground = Brushes.White,
+                FontSize = 12,
+                Width = 100,
+                Height = 30,
+                BorderThickness = new Thickness(0)
+            };
+
+            Button proximaFaseButton = new Button
+            {
+                Content = "Avançar",
+                Background = new SolidColorBrush(Color.FromRgb(33, 150, 243)), // Azul
+                Foreground = Brushes.White,
+                FontSize = 12,
+                Width = 100,
+                Height = 30,
+                BorderThickness = new Thickness(0)
+            };
+
+            detalhesButton.Click += (sender, e) => AbrirDetalhesDoCarro(carro);
+            proximaFaseButton.Click += (sender, e) => AvancarParaProximaFase(carro);
+
+            botoesAcoes.Children.Add(detalhesButton);
+            botoesAcoes.Children.Add(proximaFaseButton);
+
+            panel.Children.Add(botoesAcoes);
             carContainer.Child = panel;
 
             return carContainer;
         }
+
+
+
+        private void AbrirDetalhesDoCarro(Carro carro)
+        {
+            try
+            {
+                var detalhesWindow = new Detalhes(this, carro.Id);
+                detalhesWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao abrir detalhes: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void AvancarParaProximaFase(Carro carro)
+        {
+            try
+            {
+                var manutencaoWindow = new ManutencaoWindow(carro.Id);
+                manutencaoWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao abrir detalhes: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void AbrirTelaCarro(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var carrosWindow = new CarrosWindow(this); // 👈 Passa referência da MainWindow
+                carrosWindow.ShowDialog(); // 👈 Usa ShowDialog para esperar fechar
+                CarregarCarrosDoBanco();   // 🔄 Recarrega após fechar a janela
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao abrir a tela: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void AbrirHome(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var homeWindow = new MainWindow();
+                homeWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao abrir a tela: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void TelaRelatorio(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var relatorioWindow = new Relatorio();
+                relatorioWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao abrir a tela: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         private void CarregarCarrosDoBanco()
         {
-            using var conn = new DatabaseService().GetConnection();
-            conn.Open();
-
-            string query = "SELECT id, marca, modelo, placa, nome_proprietario, contato, cpf, ano_fabricacao, cor FROM carros";
-            using var cmd = new MySqlCommand(query, conn);
-            using var reader = cmd.ExecuteReader();
-
-            CarrosNaOficina.Clear(); // Limpa a lista antes de recarregar os dados
-
-            while (reader.Read())
+            try
             {
-                var carro = new Carro
+                using var conn = new DatabaseService().GetConnection();
+                conn.Open();
+
+                string query = @"
+            SELECT c.id, c.marca, c.modelo, c.placa, c.nome_proprietario, c.contato, c.cpf, c.ano_fabricacao, c.cor, m.prioridades 
+            FROM carros c
+            INNER JOIN manutencoes m ON c.id = m.carro_id"; // 🔥 Busca a prioridade corretamente
+
+                using var cmd = new MySqlCommand(query, conn);
+                using var reader = cmd.ExecuteReader();
+
+                CarrosNaOficina.Clear(); // 🔥 Limpa a lista antes de recarregar os dados
+
+                while (reader.Read())
                 {
-                    Id = reader.GetInt32("id"),
-                    Marca = reader.GetString("marca"),
-                    Modelo = reader.GetString("modelo"),
-                    Placa = reader.GetString("placa"),
-                    NomeProprietario = reader.GetString("nome_proprietario"),
-                    Contato = reader.GetString("contato"),
-                    Cpf = reader.GetString("cpf"),
-                    AnoFabricacao = reader.GetInt32("ano_fabricacao"),
-                    Cor = reader.GetString("cor")
-                };
+                    var carro = new Carro
+                    {
+                        Id = reader.GetInt32("id"),
+                        Marca = reader.GetString("marca"),
+                        Modelo = reader.GetString("modelo"),
+                        Placa = reader.GetString("placa"),
+                        NomeProprietario = reader.GetString("nome_proprietario"),
+                        Contato = reader.GetString("contato"),
+                        Cpf = reader.GetString("cpf"),
+                        AnoFabricacao = reader.GetInt32("ano_fabricacao"),
+                        Cor = reader.GetString("cor"),
+                        Prioridades = reader["prioridades"] != DBNull.Value ? reader.GetInt32("prioridades") : 1
+                    };
 
-                CarrosNaOficina.Add(carro);
+                    CarrosNaOficina.Add(carro);
+                }
+
+                AtualizarListaDeCarros(); // 🚀 Atualiza os blocos na interface
             }
-
-            AtualizarListaDeCarros(); // 🚀 Recria os blocos na interface ao abrir o sistema!
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao carregar carros: {ex.Message}", "Erro no Banco de Dados", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
     }

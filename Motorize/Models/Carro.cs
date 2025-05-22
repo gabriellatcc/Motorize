@@ -17,6 +17,15 @@ namespace Motorize.Models
         public string NomeProprietario { get; set; }
         public string Contato { get; set; }
         public string Cpf { get; set; }
+        public int Prioridades { get; set; }
+        public string Observacoes { get; set; }
+        public string MotivoPrincipal { get; set; }
+        public string ProblemaReal { get; set; }
+        public string FuncionarioResponsavel { get; set; }
+        public string TempoPlanejado { get; set; }
+        public string Trocas { get; set; }
+        public string RecursosUtilizados { get; set; }
+        public decimal ValorServico { get; set; }
     }
 }
 
