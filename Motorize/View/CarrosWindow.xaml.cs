@@ -150,26 +150,47 @@ namespace Motorize.View
                     using var conn = new DatabaseService().GetConnection();
                     conn.Open();
 
-                    using (var deleteCarro = new MySqlCommand("DELETE FROM carros WHERE id = @id", conn))
+                    using var transaction = conn.BeginTransaction(); // 🔒 Garante que as operações sejam atômicas
+
+                    try
                     {
-                        deleteCarro.Parameters.AddWithValue("@id", carroSelecionado.Id);
-                        int afetadosCarro = deleteCarro.ExecuteNonQuery();
-
-                        if (afetadosCarro > 0)
+                        // 1. Excluir manutenção vinculada primeiro
+                        using (var deleteManutencao = new MySqlCommand("DELETE FROM manutencoes WHERE carro_id = @id", conn, transaction))
                         {
-                            MessageBox.Show("Carro excluído com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                            deleteManutencao.Parameters.AddWithValue("@id", carroSelecionado.Id);
+                            deleteManutencao.ExecuteNonQuery();
+                        }
 
-                            AtualizarListaDeCarros();
-                            AtualizarDadosNosBlocos(); // 🔥 Atualiza apenas os textos sem recriação
-                        }
-                        else
+                        // 2. Excluir o carro
+                        using (var deleteCarro = new MySqlCommand("DELETE FROM carros WHERE id = @id", conn, transaction))
                         {
-                            MessageBox.Show("Erro ao excluir o carro.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                            deleteCarro.Parameters.AddWithValue("@id", carroSelecionado.Id);
+                            int afetadosCarro = deleteCarro.ExecuteNonQuery();
+
+                            if (afetadosCarro > 0)
+                            {
+                                transaction.Commit(); // ✅ Tudo certo, confirmar
+
+                                MessageBox.Show("Carro excluído com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                                AtualizarListaDeCarros();
+                                AtualizarDadosNosBlocos();
+                            }
+                            else
+                            {
+                                transaction.Rollback();
+                                MessageBox.Show("Erro ao excluir o carro.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show($"Erro ao excluir: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }
         }
+
 
         private void AtualizarListaDeCarros()
         {
