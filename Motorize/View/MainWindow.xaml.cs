@@ -25,10 +25,10 @@ namespace Motorize.View
             InitializeComponent();
             TestarBanco();
             AtualizarListaDeCarros();
-            CarregarCarrosDoBanco(); //Os veículos são carregados ao abrir o sistema!
+            CarregarCarrosDoBanco(); //Os veículos são carregados ao abrir o sistema
         
         }
-
+        //teste de banco de dados
         private void TestarBanco()
         {
             try
@@ -42,27 +42,29 @@ namespace Motorize.View
                 MessageBox.Show($"Erro ao conectar ao banco de dados: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        //criar carro
         public void AdicionarCarro(Carro carro)
         {
             CarrosNaOficina.Add(carro);
             AtualizarListaDeCarros();
         }
-
+        //atualizar a lista, caso o carro for adicionado
         public void AtualizarListaDeCarros()
         {
             CarContainerPanel.Children.Clear(); // Limpa os blocos antigos para evitar duplicações
 
             foreach (var carro in CarrosNaOficina)
             {
-                var blocoCarro = CriarBlocoCarro(carro); // 🔥 Garante que cada carro tenha seu bloco recriado
+                var blocoCarro = CriarBlocoCarro(carro); //Garante que cada carro tenha seu bloco recriado
                 CarContainerPanel.Children.Add(blocoCarro);
             }
         }
+        //fechar tela
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
+        //leva para a tela que adiciona o carro no banco
         private void AddCarButton_Click(object sender, RoutedEventArgs e)
         {
             var novaJanela = new CarCheckIn(this);
@@ -74,9 +76,10 @@ namespace Motorize.View
             }
 
         }
+        //cria os blocos da tela principal
         private Border CriarBlocoCarro(Carro carro)
         {
-            // 🔹 Texto e cor da prioridade
+            //Texto e cor da prioridade
             string prioridadeDescricao = carro.Prioridades switch
             {
                 1 => "1 - Simples e rápido",
@@ -118,7 +121,7 @@ namespace Motorize.View
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            // 🔹 Prioridade fixa + descrição colorida
+            //Prioridade fixa + descrição colorida
             panel.Children.Add(new TextBlock
             {
                 Text = "Prioridade:",
@@ -137,7 +140,7 @@ namespace Motorize.View
                 Margin = new Thickness(0, 0, 0, 5)
             });
 
-            // 🔹 Imagem do carro
+            // Imagem do carro
             panel.Children.Add(new Image
             {
                 Source = new BitmapImage(new Uri("C:/Users/livia/OneDrive/Documentos/B - Faculdade/Terceiro Semestre/POO-Carol/Carrinho.png")),
@@ -147,7 +150,7 @@ namespace Motorize.View
                 HorizontalAlignment = HorizontalAlignment.Center
             });
 
-            // 🔹 Informações com prefixo em negrito
+            // Informações com prefixo em negrito
             panel.Children.Add(new TextBlock
             {
                 Inlines = {
@@ -184,7 +187,7 @@ namespace Motorize.View
                 FontSize = 12
             });
 
-            // 🔹 Botões
+            // Botões
             StackPanel botoesAcoes = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
@@ -226,7 +229,7 @@ namespace Motorize.View
         }
 
 
-
+        //ação para abrir a tela de detalhes
         private void AbrirDetalhesDoCarro(Carro carro)
         {
             try
@@ -239,7 +242,7 @@ namespace Motorize.View
                 MessageBox.Show($"Erro ao abrir detalhes: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        //ação de abrir a tela de manutenções
         private void AvancarParaProximaFase(Carro carro)
         {
             try
@@ -252,13 +255,14 @@ namespace Motorize.View
                 MessageBox.Show($"Erro ao abrir detalhes: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        //abrir tela de carros para alterar e excluir através do menu
         private void AbrirTelaCarro(object sender, RoutedEventArgs e)
         {
             try
             {
-                var carrosWindow = new CarrosWindow(this); // 👈 Passa referência da MainWindow
-                carrosWindow.ShowDialog(); // 👈 Usa ShowDialog para esperar fechar
-                CarregarCarrosDoBanco();   // 🔄 Recarrega após fechar a janela
+                var carrosWindow = new CarrosWindow(this); //Passa referência da MainWindow
+                carrosWindow.ShowDialog(); //Usa ShowDialog para esperar fechar
+                CarregarCarrosDoBanco();   //Recarrega após fechar a janela
             }
             catch (Exception ex)
             {
@@ -266,12 +270,12 @@ namespace Motorize.View
             }
         }
 
-
+        //minimiza a tela
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
         }
-
+        //abre a tela principal no menu, ao clicar em home
         private void AbrirHome(object sender, RoutedEventArgs e)
         {
             try
@@ -284,6 +288,7 @@ namespace Motorize.View
                 MessageBox.Show($"Erro ao abrir a tela: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        //abre a tela de gerar relatório no menu
         private void TelaRelatorio(object sender, RoutedEventArgs e)
         {
             try
@@ -296,6 +301,7 @@ namespace Motorize.View
                 MessageBox.Show($"Erro ao abrir a tela: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        //carrega os carros do banco
         private void CarregarCarrosDoBanco()
         {
             try
@@ -306,12 +312,12 @@ namespace Motorize.View
                 string query = @"
             SELECT c.id, c.marca, c.modelo, c.placa, c.nome_proprietario, c.contato, c.cpf, c.ano_fabricacao, c.cor, m.prioridades 
             FROM carros c
-            INNER JOIN manutencoes m ON c.id = m.carro_id"; // 🔥 Busca a prioridade corretamente
+            INNER JOIN manutencoes m ON c.id = m.carro_id"; // Busca a prioridade corretamente
 
                 using var cmd = new MySqlCommand(query, conn);
                 using var reader = cmd.ExecuteReader();
 
-                CarrosNaOficina.Clear(); // 🔥 Limpa a lista antes de recarregar os dados
+                CarrosNaOficina.Clear(); // Limpa a lista antes de recarregar os dados
 
                 while (reader.Read())
                 {
@@ -332,7 +338,7 @@ namespace Motorize.View
                     CarrosNaOficina.Add(carro);
                 }
 
-                AtualizarListaDeCarros(); // 🚀 Atualiza os blocos na interface
+                AtualizarListaDeCarros(); // Atualiza os blocos na interface
             }
             catch (Exception ex)
             {

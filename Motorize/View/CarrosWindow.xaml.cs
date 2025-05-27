@@ -22,16 +22,16 @@ namespace Motorize.View
     public partial class CarrosWindow : Window
     {
         public List<Carro> Carros { get; set; }
-        private MainWindow _mainWindow; // <-- Adicionado campo privado para armazenar referência
+        private MainWindow _mainWindow; 
 
         public CarrosWindow(MainWindow parent)
         {
             InitializeComponent();
-            _mainWindow = parent; // <-- Correto
+            _mainWindow = parent; 
             CarregarCarros();
         }
 
-
+        //carregar dados da tabela
         private void CarregarCarros()
         {
             Carros = new List<Carro>();
@@ -86,6 +86,7 @@ namespace Motorize.View
 
             CarrosDataGrid.ItemsSource = Carros;
         }
+        //alterar dados do carro
         private void AlterarCarro_Click(object sender, RoutedEventArgs e)
         {
             if (CarrosDataGrid.SelectedItem is Carro carroSelecionado)
@@ -93,22 +94,25 @@ namespace Motorize.View
                 var editarcarroWindow = new EditarCarroWindow(carroSelecionado);
                 editarcarroWindow.ShowDialog();
 
-                AtualizarListaDeCarros(); // 🔥 Atualiza os dados na memória
-                AtualizarDadosNosBlocos(); // 🔥 Atualiza os textos sem recriar os blocos
+                AtualizarListaDeCarros(); // Atualiza os dados na memória
+                AtualizarDadosNosBlocos(); //Atualiza os textos sem recriar os blocos
             }
         }
+        //minimizar tela
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
+        //atualizar dados do blocos painel
         private StackPanel BlocosCarrosPanel = new StackPanel
         {
             Orientation = Orientation.Vertical,
             Margin = new Thickness(10)
         };
+        //atualizar dados do blocos
         private void AtualizarDadosNosBlocos()
         {
-            foreach (var bloco in BlocosCarrosPanel.Children.OfType<Border>()) // 🔹 Se "CarrosStackPanel" não existe, use "BlocosCarrosPanel"
+            foreach (var bloco in BlocosCarrosPanel.Children.OfType<Border>()) // Se "CarrosStackPanel" não existe, use "BlocosCarrosPanel"
             {
                 var panel = bloco.Child as StackPanel;
                 if (panel == null) continue;
@@ -121,7 +125,7 @@ namespace Motorize.View
                 var carroAtualizado = Carros.FirstOrDefault(c => c.Id == idCarro);
                 if (carroAtualizado == null) continue;
 
-                // 🔹 Atualiza apenas os textos dentro dos blocos sem recriar
+                //Atualiza apenas os textos dentro dos blocos sem recriar
                 foreach (var textBlock in panel.Children.OfType<TextBlock>())
                 {
                     if (textBlock.Text.StartsWith("Marca: "))
@@ -138,7 +142,7 @@ namespace Motorize.View
                 }
             }
         }
-
+        //excluir carro do banco
         private void ExcluirCarro_Click(object sender, RoutedEventArgs e)
         {
             if (CarrosDataGrid.SelectedItem is Carro carroSelecionado)
@@ -150,7 +154,7 @@ namespace Motorize.View
                     using var conn = new DatabaseService().GetConnection();
                     conn.Open();
 
-                    using var transaction = conn.BeginTransaction(); // 🔒 Garante que as operações sejam atômicas
+                    using var transaction = conn.BeginTransaction(); 
 
                     try
                     {
@@ -169,7 +173,7 @@ namespace Motorize.View
 
                             if (afetadosCarro > 0)
                             {
-                                transaction.Commit(); // ✅ Tudo certo, confirmar
+                                transaction.Commit(); 
 
                                 MessageBox.Show("Carro excluído com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                                 AtualizarListaDeCarros();
@@ -191,7 +195,7 @@ namespace Motorize.View
             }
         }
 
-
+        //atualizar lista de carros ao mexer em algo nessa tela
         private void AtualizarListaDeCarros()
         {
             using var conn = new DatabaseService().GetConnection();
@@ -205,7 +209,7 @@ namespace Motorize.View
             using var cmd = new MySqlCommand(query, conn);
             using var reader = cmd.ExecuteReader();
 
-            Carros.Clear(); // 🔹 Limpa os dados antigos
+            Carros.Clear(); // Limpa os dados antigos
 
             while (reader.Read())
             {
@@ -226,14 +230,14 @@ namespace Motorize.View
                 Carros.Add(carro);
             }
 
-            CarrosDataGrid.ItemsSource = null; // 🔹 Força atualização da tabela
+            CarrosDataGrid.ItemsSource = null; // Força atualização da tabela
             CarrosDataGrid.ItemsSource = Carros;
             CarrosDataGrid.Items.Refresh();
 
-            AtualizarDadosNosBlocos(); // 🔥 Atualiza os blocos sem recriá-los
+            AtualizarDadosNosBlocos(); // Atualiza os blocos sem recriá-los
         }
 
-
+        //fechar tela
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

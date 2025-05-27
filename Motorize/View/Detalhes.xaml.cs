@@ -19,7 +19,7 @@ namespace Motorize.View
             mainWindow = window ?? throw new ArgumentNullException(nameof(window));
             CarregarDetalhesDoCarro(carroId);
         }
-
+        //carregar dados do banco dos carros do bloco
         private void CarregarDetalhesDoCarro(int carroId)
         {
             using var conn = new DatabaseService().GetConnection();
@@ -78,22 +78,24 @@ namespace Motorize.View
             }
         }
 
-
+        //ir para tela carros, onde é possível alterar e excluir
         private void VoltarParaCarros_Click(object sender, RoutedEventArgs e)
         {
             var mainWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
             if (mainWindow != null)
             {
-                var carrosPage = new CarrosWindow(mainWindow); // 🔹 Passando o argumento necessário
+                var carrosPage = new CarrosWindow(mainWindow); 
                 carrosPage.Show();
                 this.Close();
             }
         }
+        //minimizar tela
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
         }
 
+        //fechar tela
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

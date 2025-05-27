@@ -28,11 +28,12 @@ namespace Motorize.View
             carroAtual = carro;
             PreencherCampos();
         }
+        //fechar tela
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-
+        //preencher campos para ser alterado o necessario 
         private void PreencherCampos()
         {
             MarcaTextBox.Text = carroAtual.Marca ?? "Não informado";
@@ -47,6 +48,7 @@ namespace Motorize.View
             RecursosUtilizadosTextBox.Text = carroAtual.RecursosUtilizados ?? "Não informado";
             ValorServicoTextBox.Text = carroAtual.ValorServico.ToString("0.00");
         }
+        //Minimizar tela
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
@@ -57,7 +59,7 @@ namespace Motorize.View
             if (e.ButtonState == MouseButtonState.Pressed)
                 this.DragMove();
         }
-
+        //Salvar alterações feitas no banco
         private void SalvarAlteracoes_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -104,12 +106,15 @@ namespace Motorize.View
                     cmdManut.Parameters.AddWithValue("@ValorServico", valorServico);
 
                     cmdManut.ExecuteNonQuery();
+
+
+
                 }
 
                 MessageBox.Show("Alterações salvas com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Apenas feche a janela se essa for uma janela secundária (ex: edição)
                 this.Close();
+                ;
             }
             catch (Exception ex)
             {

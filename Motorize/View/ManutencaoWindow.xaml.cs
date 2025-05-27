@@ -30,7 +30,7 @@ namespace Motorize.View
             carroId = idCarro;
             CarregarDadosFases();
         }
-
+        //carregar dados se tiver alguma fase preenchida
         private void CarregarDadosFases()
         {
             try
@@ -60,7 +60,7 @@ namespace Motorize.View
                 MessageBox.Show($"Erro ao carregar os dados: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        //salvar os dados das novas fases
         private void AtualizarFase_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -83,10 +83,9 @@ namespace Motorize.View
 
                 int linhasAfetadas = cmd.ExecuteNonQuery();
 
-                if (linhasAfetadas > 0)
-                    MessageBox.Show("Fase da manutenção atualizada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
-                else
-                    MessageBox.Show("Nenhum dado foi alterado. Verifique as informações.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                
+                MessageBox.Show("Fase da manutenção atualizada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+               
             }
             catch (Exception ex)
             {
@@ -94,11 +93,13 @@ namespace Motorize.View
             }
         }
 
+        //minimizar tela
         private void MinimizarJanela_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
         }
 
+        //fechar tela
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

@@ -20,7 +20,7 @@ namespace Motorize.View
             InitializeComponent();
             CarregarCarros();
         }
-
+        //carregar dados dos carros na tabela
         private void CarregarCarros()
         {
             Carros = new List<Carro>();
@@ -74,7 +74,7 @@ namespace Motorize.View
 
             CarrosDataGrid.ItemsSource = Carros;
         }
-
+        //emitir relatório (modelo do relatório)
         private void EmitirRelatorio(object sender, RoutedEventArgs e)
         {
             if (CarrosDataGrid.SelectedItem is Carro carroSelecionado)
@@ -82,13 +82,12 @@ namespace Motorize.View
                 var doc = new FlowDocument();
                 var para = new Paragraph();
 
-                // Título
-                // Nome da empresa e slogan
-                // Nome da empresa e slogan
+              
+                // Nome da empresa 
                 para.Inlines.Add(new Bold(new Run("MOTORIZE\n"))
                 {
                     Foreground = Brushes.DarkBlue,
-                    FontSize = 28 // Fonte maior
+                    FontSize = 28 
                 });
                 para.Inlines.Add(new Italic(new Run("A excelência na manutenção automotiva\n\n"))
                 {
@@ -110,7 +109,7 @@ namespace Motorize.View
                 para.Inlines.Add(new Run($"Ano de Fabricação: {carroSelecionado.AnoFabricacao}\n\n"));
                 para.Inlines.Add(new Run($"Cor: {carroSelecionado.Cor}\n\n"));
 
-                // Adicionando espaçamento extra
+                
                 para.Inlines.Add(new Run("\n\n------------------------------------------------------\n\n"));
 
                 // Informações de manutenção
@@ -142,11 +141,13 @@ namespace Motorize.View
             }
         }
 
+        //minimizar tela
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
 
+        //fechar tela
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
